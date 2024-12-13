@@ -1,0 +1,28 @@
+{
+  "name": "mds-api-tp",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx tsc && node dist/index.js"
+  },
+  "author": "Kévin Voisine",
+  "license": "ISC",
+  "description": "TP API REST pour apprendre les concepts de base d'une API REST",
+  "dependencies": {
+    "@sequelize/mysql": "^7.0.0-alpha.43",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "sequelize": "^6.37.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "typescript": "^5.7.2",
+    "@stylistic/eslint-plugin": "^2.12.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-promise": "^7.2.1",
+    "prettier": "^3.4.2"
+  }
+}
