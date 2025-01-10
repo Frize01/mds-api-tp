@@ -2,7 +2,7 @@
 
 - **Utilisateur** - _/users_
     - **POST** - _/users_
-    - **GET** - _/users/{role}_
+    - **GET** - _/users/role/{role}_
     - **GET** - _/users/{id}_
     - **PUT** - _/users/{id}_
     - **DELETE** - _/users/{id}_
