@@ -1,45 +1,63 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
-const Supplier = sequelize.define("suppliers", {
+const Order = sequelize.define("orders", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    name: {
+    ordered_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    status: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    address: {
+    payment_method: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    phone: {
+    street: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    siret: {
+    city: {
         type: DataTypes.STRING,
         allowNull: false,
-        maxLength: 14,
     },
-    email: {
+    zip_code: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    delivery_time: {
+        type: DataTypes.TIME,
+        allowNull: true,
+    },
+    tracking_number: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    delivery_notes: {
+        type: DataTypes.TEXT,
+        allowNull: true,
     },
 });
 
-Supplier.hasMany(User, {
-    foreignKey: "id_supplier",
+Order.belongsTo(User, {
+    foreignKey: "id_user",
     onDelete: "NULL",
     onUpdate: "CASCADE",
 });
 
-Supplier.hasMany(Product, {
-    foreignKey: "id_supplier",
+Order.belongsTo(Route, {
+    foreignKey: "id_route",
     onDelete: "NULL",
     onUpdate: "CASCADE",
 });
 
-export default Supplier;
+
+
+export default Order;

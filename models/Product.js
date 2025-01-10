@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
+import Supplier from "./Supplier.js";
+import OrderLine from "./OrderLine.js";
 
 const Product = sequelize.define("products", {
     id: {
@@ -31,11 +33,21 @@ const Product = sequelize.define("products", {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    category: {
+        type: DataTypes.ENUM('service', 'product'),
+        allowNull: false,
+    },
 });
 
 Product.belongsTo(Supplier, {
     foreignKey: "id_supplier",
     onDelete: "NULL",
+    onUpdate: "CASCADE",
+});
+
+Product.hasMany(OrderLine, {
+    foreignKey: "id_product",
+    onDelete: "CASCADE",
     onUpdate: "CASCADE",
 });
 

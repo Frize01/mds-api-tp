@@ -11,6 +11,7 @@ const Vehicule = sequelize.define("vehicules", {
     immatriculation: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
     },
     marque: {
         type: DataTypes.STRING,
