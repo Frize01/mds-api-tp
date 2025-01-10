@@ -1,4 +1,32 @@
-# Routes de base imposées
+# TP API
+
+## Installation
+
+Installation de docker
+```sh
+apt install -y docker.io docker-compose
+sudo usermod -aG docker $USER
+```
+
+Clône du projet
+``` sh
+git clone https://github.com/Frize01/mds-api-tp.git app
+cd app
+cp  .env.example .env
+docker-compose up --build -d
+```
+Changer les données du .env avec les data que vous souhaitez et adapté docker-compose avec les mêmes data.
+
+## A finir
+- swagger (doc)
+- JWT
+- PostMan
+- socket io
+- crud
+- test unitaire
+
+
+## Routes imposées
 
 - **Utilisateur** - _/users_
     - **POST** - _/users_
