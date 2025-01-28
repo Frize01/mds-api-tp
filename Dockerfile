@@ -2,7 +2,7 @@
 FROM node:22
 
 # Définir le répertoire de travail
-WORKDIR /
+WORKDIR /app
 
 # Copier le fichier package.json et installer les dépendances
 COPY package*.json ./
