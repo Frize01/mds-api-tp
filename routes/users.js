@@ -11,30 +11,31 @@ const validationCreate = [
   body("password").isLength({ min: 8 }).withMessage("Password must be at least 8 characters long"),
   body("phone").optional().isNumeric().withMessage("Phone number must contain only numbers"),
   body("name").notEmpty().withMessage("Name is required"),
-  body("role").notEmpty().withMessage("Role is required"),
+  body("role").notEmpty().isIn(['admin', 'user', 'fournisseur']).withMessage("Role must be either 'admin' or 'user' or 'fournisseur'"),
 ];
 
 const validationUpdate = [
   body("email").isEmail().withMessage("Please provide a valid email"),
   body("phone").optional().isNumeric().withMessage("Phone number must contain only numbers"),
   body("name").notEmpty().withMessage("Name is required"),
-  body("role").notEmpty().withMessage("Role is required"),
+  body("role").notEmpty().isIn(['admin', 'user', 'fournisseur']).withMessage("Role must be either 'admin' or 'user' or 'fournisseur'"),
 ];
 
 const validationPatch = [
   body("name").optional().notEmpty().withMessage("Name is required"),
-  body("role").optional().notEmpty().withMessage("Role is required"),
+  body("email").optional().isEmail().withMessage("Please provide a valid email"),
+  body("phone").optional().isNumeric().withMessage("Phone number must contain only numbers"),
+  body("role").optional().isIn(['admin', 'user', 'fournisseur']).withMessage("Role must be either 'admin' or 'user' or 'fournisseur'"),
 ];
 
 userRouter.get("/", authenticateJWT, async (req, res) => {
-  // get all users
   const users = await User.findAll({
     attributes: { exclude: ["password"] },
   });
   res.send(users);
 });
 
-userRouter.get("/getById/:id", authenticateJWT, async (req, res) => {
+userRouter.get("/:id", authenticateJWT, async (req, res) => {
   const user = await User.findOne({
     attributes: ["id", "name", "email", "createdAt", "updatedAt", "role"],
     where: { id: req.params.id },

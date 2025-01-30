@@ -1,6 +1,7 @@
 
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import User from "../models/User.js";
 dotenv.config();
 
 
@@ -18,12 +19,16 @@ const authenticateJWT = (req, res, next) => {
     token = authHeader.split(" ")[1];
   }
 
-  jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+  jwt.verify(token, process.env.SECRET_KEY, async (err, user) => {
     if (err) {
       return res.status(403).json({ message: "Invalid token" });
     }
-    req.user = user;
-    next();
+    if (await User.findOne({ where: { id: user.id, email: user.email } })) {
+      req.user = user;
+      next();
+    } else {
+      return res.status(403).json({ message: "Invalid token" });
+    }
   });
 };
 
