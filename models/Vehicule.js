@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
-import Route from "./Route.js";
 
 const Vehicule = sequelize.define("vehicules", {
     id: {
@@ -25,12 +24,6 @@ const Vehicule = sequelize.define("vehicules", {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-});
-
-Vehicule.belongsTo(Route, {
-    foreignKey: "id_vehicule",
-    onDelete: "NULL",
-    onUpdate: "CASCADE",
 });
 
 export default Vehicule;

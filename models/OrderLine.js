@@ -25,16 +25,6 @@ const OrderLine = sequelize.define("order_lines", {
     },
 });
 
-OrderLine.belongsTo(Order, {
-    foreignKey: "id_order",
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-});
 
-OrderLine.belongsTo(Product, {
-    foreignKey: "id_product",
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-});
 
 export default OrderLine;

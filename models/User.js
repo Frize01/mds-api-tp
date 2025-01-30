@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
-import Supplier from "./Supplier.js";
 
 const User = sequelize.define("users", {
     id: {
@@ -36,13 +35,6 @@ const User = sequelize.define("users", {
         type: DataTypes.DATE,
         allowNull: false,
     },
-});
-
-User.belongsTo(Supplier, {
-    foreignKey: "id_supplier",
-    onDelete: "NULL",
-    onUpdate: "CASCADE",
-    allowNull: true,
 });
 
 export default User;

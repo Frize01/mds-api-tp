@@ -29,10 +29,4 @@ const Route = sequelize.define("routes", {
     },
 });
 
-Route.belongsTo(Vehicule, {
-    foreignKey: "id_vehicule",
-    onDelete: "NULL",
-    onUpdate: "CASCADE",
-});
-
 export default Route;

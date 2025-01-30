@@ -46,17 +46,6 @@ const Order = sequelize.define("orders", {
     },
 });
 
-Order.belongsTo(User, {
-    foreignKey: "id_user",
-    onDelete: "NULL",
-    onUpdate: "CASCADE",
-});
-
-Order.belongsTo(Route, {
-    foreignKey: "id_route",
-    onDelete: "NULL",
-    onUpdate: "CASCADE",
-});
 
 
 

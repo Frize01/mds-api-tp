@@ -21,16 +21,4 @@ const Comment = sequelize.define("comments", {
     }
 });
 
-Comment.belongsTo(User, {
-    foreignKey: "id_user",
-    onDelete: "NULL",
-    onUpdate: "CASCADE",
-});
-
-Comment.belongsTo(Product, {
-    foreignKey: "id_product",
-    onDelete: "NULL",
-    onUpdate: "CASCADE",
-});
-
 export default Comment;

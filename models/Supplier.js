@@ -30,16 +30,4 @@ const Supplier = sequelize.define("suppliers", {
     },
 });
 
-Supplier.hasMany(User, {
-    foreignKey: "id_supplier",
-    onDelete: "NULL",
-    onUpdate: "CASCADE",
-});
-
-Supplier.hasMany(Product, {
-    foreignKey: "id_supplier",
-    onDelete: "NULL",
-    onUpdate: "CASCADE",
-});
-
 export default Supplier;
