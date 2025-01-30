@@ -66,10 +66,10 @@ Pense à bien adapter les données dans ton fichier `.env` ainsi que dans ton fi
 
 ## A finir
 - swagger (doc)
-- JWT
-- PostMan
-- socket io
-- crud
+- JWT (✅)
+- PostMan (1 crud)
+- socket io (dab)
+- crud (1)
 - test unitaire
 
 
