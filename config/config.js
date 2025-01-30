@@ -1,4 +1,6 @@
-require('dotenv').config();
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const commonConfig = {
   username: process.env.DB_USERNAME,
@@ -11,7 +13,7 @@ const commonConfig = {
   seederStorageTableName: 'sequelize_seeds',
 };
 
-module.exports = {
+export default {
   development: { ...commonConfig },
   test: { ...commonConfig },
   production: { ...commonConfig },
