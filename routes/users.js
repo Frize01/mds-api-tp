@@ -1,10 +1,15 @@
 import express from "express";
-import User from "../models/User.js";
+import { body } from "express-validator";
 import authenticateJWT from "../middlewares/authenticateJWT.js";
-import { body, validationResult } from "express-validator";
-import bcrypt from "bcryptjs";
+import {
+  getAllUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  patchUser,
+  deleteUser,
+} from "../controllers/userController.js";
 
-const userRouter = express.Router();
 
 const validationCreate = [
   body("email").isEmail().withMessage("Please provide a valid email"),
@@ -51,6 +56,9 @@ const validationPatch = [
     .withMessage("Role must be either 'admin' or 'user' or 'fournisseur'"),
 ];
 
+
+const userRouter = express.Router();
+
 /**
  * @swagger
  * /v0/users:
@@ -68,12 +76,7 @@ const validationPatch = [
  *       500:
  *         description: Erreur du serveur lors de la récupération des utilisateurs.
  */
-userRouter.get("/", authenticateJWT, async (req, res) => {
-  const users = await User.findAll({
-    attributes: { exclude: ["password"] },
-  });
-  res.send(users);
-});
+userRouter.get("/", authenticateJWT, getAllUsers);
 
 /**
  * @swagger
@@ -101,14 +104,7 @@ userRouter.get("/", authenticateJWT, async (req, res) => {
  *       500:
  *         description: Erreur du serveur lors de la récupération de l'utilisateur.
  */
-
-userRouter.get("/:id", authenticateJWT, async (req, res) => {
-  const user = await User.findOne({
-    attributes: ["id", "name", "email", "createdAt", "updatedAt", "role"],
-    where: { id: req.params.id },
-  });
-  res.send(user);
-});
+userRouter.get("/:id", authenticateJWT, getUserById);
 
 // Documentation Swagger pour la route POST /users
 /**
@@ -154,38 +150,7 @@ userRouter.get("/:id", authenticateJWT, async (req, res) => {
  *       500:
  *         description: Erreur du serveur lors de la création de l'utilisateur.
  */
-userRouter.post("/", authenticateJWT, validationCreate, async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  try {
-    const { name, email, password, role, phone } = req.body;
-    const user = await User.create({
-      name,
-      email,
-      password: await bcrypt.hash(password, 10),
-      role,
-      phone: phone || null,
-    });
-    res.status(201).json({
-      message: "Utilisateur créé avec succès",
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        phone: user.phone,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Erreur lors de la création de l'utilisateur",
-      error: error.message,
-    });
-  }
-});
+userRouter.post("/", authenticateJWT, validationCreate, createUser);
 
 // Documentation Swagger pour la route PUT /users/{id}
 /**
@@ -230,37 +195,7 @@ userRouter.post("/", authenticateJWT, validationCreate, async (req, res) => {
  *       500:
  *         description: Erreur du serveur lors de la mise à jour de l'utilisateur.
  */
-userRouter.put("/:id", authenticateJWT, validationUpdate, async (req, res) => {
-  try {
-    const { name, email, role } = req.body;
-    const user = await User.findByPk(req.params.id);
-
-    if (!user) {
-      return res.status(404).json({ message: "Utilisateur non trouvé" });
-    }
-
-    await user.update({
-      name: name || user.name,
-      email: email || user.email,
-      role: role || user.role,
-    });
-
-    res.json({
-      message: "Utilisateur mis à jour avec succès",
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Erreur lors de la mise à jour de l'utilisateur",
-      error: error.message,
-    });
-  }
-});
+userRouter.put("/:id", authenticateJWT, validationUpdate, updateUser);
 
 // Documentation Swagger pour la route PATCH /users/{id}
 /**
@@ -305,25 +240,7 @@ userRouter.put("/:id", authenticateJWT, validationUpdate, async (req, res) => {
  *       500:
  *         description: Erreur du serveur lors de la mise à jour de l'utilisateur.
  */
-userRouter.patch("/:id", authenticateJWT, validationPatch, async (req, res) => {
-  try {
-    const { name, email, role } = req.body;
-    const user = await User.findByPk(req.params.id);
-    if (!user) {
-      return res.status(404).json({ message: "Utilisateur non trouvé" });
-    }
-    await user.update({
-      name: name || user.name,
-      role: role || user.role,
-    });
-    res.json({ message: "Utilisateur mis à jour avec succès", user });
-  } catch (error) {
-    res.status(500).json({
-      message: "Erreur lors de la mise à jour de l'utilisateur",
-      error: error.message,
-    });
-  }
-});
+userRouter.patch("/:id", authenticateJWT, validationPatch, patchUser);
 
 // Documentation Swagger pour la route DELETE /users/{id}
 /**
@@ -352,22 +269,6 @@ userRouter.patch("/:id", authenticateJWT, validationPatch, async (req, res) => {
  *       500:
  *         description: Erreur du serveur lors de la suppression de l'utilisateur.
  */
-userRouter.delete("/:id", authenticateJWT, async (req, res) => {
-  try {
-    const user = await User.findByPk(req.params.id);
-
-    if (!user) {
-      return res.status(404).json({ message: "Utilisateur non trouvé" });
-    }
-
-    await user.destroy();
-    res.json({ message: "Utilisateur supprimé avec succès" });
-  } catch (error) {
-    res.status(500).json({
-      message: "Erreur lors de la suppression de l'utilisateur",
-      error: error.message,
-    });
-  }
-});
+userRouter.delete("/:id", authenticateJWT, deleteUser);
 
 export default userRouter;

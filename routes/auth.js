@@ -1,8 +1,6 @@
 import express from "express";
-import User from "../models/User.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { body, validationResult } from "express-validator";
+import { registerUser, authenticateUser } from "../controllers/authController.js";
 
 const authRouter = express.Router();
 
@@ -66,35 +64,7 @@ const validateBodyRegister = [
  *       500:
  *         description: Erreur lors de la création de l'utilisateur
  */
-authRouter.post("/register", validateBodyRegister, async (req, res) => {
-  try {
-    const { name, email, password, role, phone } = req.body;
-    const user = await User.create({
-      name,
-      email,
-      password: await bcrypt.hash(password, 10),
-      role,
-      phone: phone || null,
-    });
-    res.status(201).json({
-      message: "Utilisateur créé avec succès",
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        phone: user.phone,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Erreur lors de la création de l'utilisateur",
-      error: error.message,
-    });
-  }
-});
+authRouter.post("/register", validateBodyRegister, registerUser);
 
 /**
  * @swagger
@@ -134,30 +104,6 @@ authRouter.post("/register", validateBodyRegister, async (req, res) => {
  *       500:
  *         description: Erreur interne du serveur
  */
-authRouter.post("/", validateBody, async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ where: { email } });
-
-    console.log(req.body);
-    if (!user) {
-      return res.status(401).json({ message: "Invalid username or password" });
-    }
-    if (!(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ message: "Invalid username or password" });
-    }
-    // Génération du token JWT
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.SECRET_KEY,
-      { expiresIn: "30d" },
-    );
-
-    res.json({ message: "Auth", token });
-  } catch (error) {
-    console.error("Auth error:", error);
-    res.status(500).json({ message: "Internal server error " + error });
-  }
-});
+authRouter.post("/", validateBody, authenticateUser);
 
 export default authRouter;

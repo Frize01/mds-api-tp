@@ -2,7 +2,7 @@ import express from "express";
 import Product from "../models/Product.js";
 import authenticateJWT from "../middlewares/authenticateJWT.js";
 import { body, validationResult } from "express-validator";
-
+import { getAllProducts, getProductById, createProduct, updateProduct, patchProduct, deleteProduct } from "../controllers/productController.js";
 const productRouter = express.Router();
 
 const validationCreate = [
@@ -85,16 +85,7 @@ const validationPatch = [
  *       500:
  *         description: "Erreur lors de la récupération des produits."
  */
-productRouter.get("/", authenticateJWT, async (req, res) => {
-  try {
-    const products = await Product.findAll();
-    res.json({ message: "Products", products });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error fetching products", error: error.message });
-  }
-});
+productRouter.get("/", authenticateJWT, getAllProducts);
 
 /**
  * @swagger
@@ -121,19 +112,7 @@ productRouter.get("/", authenticateJWT, async (req, res) => {
  *       500:
  *         description: "Erreur lors de la récupération du produit."
  */
-productRouter.get("/:id", authenticateJWT, async (req, res) => {
-  try {
-    const product = await Product.findByPk(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-    res.json({ message: "Product", product });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error fetching product", error: error.message });
-  }
-});
+productRouter.get("/:id", authenticateJWT, getProductById);
 
 /**
  * @swagger
@@ -159,6 +138,7 @@ productRouter.get("/:id", authenticateJWT, async (req, res) => {
  *               price:
  *                 type: "number"
  *                 format: "float"
+ *                 default: 10
  *               stock:
  *                 type: "integer"
  *               reduce_pourcentage:
@@ -168,6 +148,7 @@ productRouter.get("/:id", authenticateJWT, async (req, res) => {
  *                 type: "string"
  *               category:
  *                 type: "string"
+ *                 default: "product"
  *     responses:
  *       200:
  *         description: "Produit créé avec succès."
@@ -176,28 +157,7 @@ productRouter.get("/:id", authenticateJWT, async (req, res) => {
  *       500:
  *         description: "Erreur lors de la création du produit."
  */
-productRouter.post("/", authenticateJWT, validationCreate, async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  try {
-    const product = await Product.create({
-      name: req.body.name,
-      description: req.body.description,
-      price: req.body.price,
-      stock: req.body.stock,
-      reduce_pourcentage: req.body.reduce_pourcentage,
-      reference: req.body.reference,
-      category: req.body.category,
-    });
-    res.json({ message: "Product created", product });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error creating product", error: error.message });
-  }
-});
+productRouter.post("/", authenticateJWT, validationCreate, createProduct);
 
 /**
  * @swagger
@@ -239,6 +199,7 @@ productRouter.post("/", authenticateJWT, validationCreate, async (req, res) => {
  *                 type: "string"
  *               category:
  *                 type: "string"
+ *                 default: "product"
  *     responses:
  *       200:
  *         description: "Produit mis à jour avec succès."
@@ -249,38 +210,7 @@ productRouter.post("/", authenticateJWT, validationCreate, async (req, res) => {
  *       500:
  *         description: "Erreur lors de la mise à jour du produit."
  */
-productRouter.put(
-  "/:id",
-  authenticateJWT,
-  validationUpdate,
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    try {
-      const product = await Product.findByPk(req.params.id);
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      await product.update({
-        name: req.body.name || product.name,
-        description: req.body.description || product.description,
-        price: req.body.price || product.price,
-        stock: req.body.stock || product.stock,
-        reference: req.body.reference || product.reference,
-        category: req.body.category || product.category,
-        reduce_pourcentage:
-          req.body.reduce_pourcentage || product.reduce_pourcentage,
-      });
-      res.json({ message: "Product updated", product });
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error updating product", error: error.message });
-    }
-  },
-);
+productRouter.put("/:id", authenticateJWT, validationUpdate, updateProduct);
 
 /**
  * @swagger
@@ -313,6 +243,7 @@ productRouter.put(
  *               price:
  *                 type: "number"
  *                 format: "float"
+ *                 default: 10
  *               stock:
  *                 type: "integer"
  *               reduce_pourcentage:
@@ -322,6 +253,7 @@ productRouter.put(
  *                 type: "string"
  *               category:
  *                 type: "string"
+ *                 default: "product"
  *     responses:
  *       200:
  *         description: "Produit mis à jour partiellement avec succès."
@@ -330,38 +262,7 @@ productRouter.put(
  *       500:
  *         description: "Erreur lors de la mise à jour du produit."
  */
-productRouter.patch(
-  "/:id",
-  authenticateJWT,
-  validationPatch,
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    try {
-      const product = await Product.findByPk(req.params.id);
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      await product.update({
-        name: req.body.name || product.name,
-        description: req.body.description || product.description,
-        price: req.body.price || product.price,
-        stock: req.body.stock || product.stock,
-        reduce_pourcentage:
-          req.body.reduce_pourcentage || product.reduce_pourcentage,
-        reference: req.body.reference || product.reference,
-        category: req.body.category || product.category,
-      });
-      res.json({ message: "Product updated", product });
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error updating product", error: error.message });
-    }
-  },
-);
+productRouter.patch("/:id", authenticateJWT, validationPatch, patchProduct);
 
 /**
  * @swagger
@@ -388,19 +289,6 @@ productRouter.patch(
  *       500:
  *         description: "Erreur lors de la suppression du produit."
  */
-productRouter.delete("/:id", authenticateJWT, async (req, res) => {
-  try {
-    const product = await Product.findByPk(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-    await product.destroy();
-    res.json({ message: "Product deleted" });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error deleting product", error: error.message });
-  }
-});
+productRouter.delete("/:id", authenticateJWT, deleteProduct);
 
 export default productRouter;

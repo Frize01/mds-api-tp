@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Socket.IO Messenger</title>
+  <title>Socket.IO Messagerie</title>
   <!-- Importation de Tailwind via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -19,8 +19,8 @@
   <div class="flex flex-col h-full w-full mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
     <!-- En-tête -->
     <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
-      <h1 class="text-2xl font-semibold text-gray-800">Messenger</h1>
-      <p class="text-sm text-gray-500">Chat in real-time</p>
+      <h1 class="text-2xl font-semibold text-gray-800">Messagerie</h1>
+      <p class="text-sm text-gray-500">Chat en temps réel</p>
     </div>
 
     <!-- Liste des messages, occupe toute la hauteur restante -->
@@ -30,8 +30,8 @@
 
     <!-- Zone d'entrée de message -->
     <div class="flex items-center px-6 py-4 border-t border-gray-200 bg-gray-50 overflow-y-auto">
-      <input type="text" id="messageInput" class="w-full py-2 px-4 rounded-lg text-gray-800 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Type your message..." />
-      <button id="sendBtn" class="ml-4 px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300">Send</button>
+      <input type="text" id="messageInput" class="w-full py-2 px-4 rounded-lg text-gray-800 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Tapez votre message..." />
+      <button id="sendBtn" class="ml-4 px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300">Envoyer</button>
     </div>
   </div>
 
@@ -39,6 +39,15 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io(); // Connexion au serveur Socket.IO
+
+    // Fonction pour générer un nom d'utilisateur aléatoire
+    function generateRandomUserName() {
+      const names = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Kévin','Frank', 'Grace', 'Hank', 'Ivy', 'Jack', 'Kathy', 'Liam', 'Mia', 'Noah', 'Olivia', 'Pam', 'Quinn', 'Ryan', 'Sarah', 'Tom', 'Uma', 'Vince', 'Wendy', 'Xavier', 'Yara', 'Zack'];
+      return names[Math.floor(Math.random() * names.length)];
+    }
+
+    // Nom d'utilisateur aléatoire pour cette session
+    const userName = generateRandomUserName();
 
     // Fonction pour afficher un message dans la liste
     function displayMessage(user, message, isSentByUser = false) {
@@ -51,7 +60,7 @@
         li.classList.add('justify-end'); // Alignement des messages à droite
         li.innerHTML = `
           <div class="bg-blue-500 text-white py-2 px-4 rounded-lg max-w-xs shadow-md">
-            <p class="font-semibold">${user}</p>
+            <p class="font-semibold">Vous</p>
             <p>${message}</p>
           </div>
         `;
@@ -59,7 +68,7 @@
         li.classList.add('justify-start'); // Alignement des messages reçus à gauche
         li.innerHTML = `
           <div class="bg-gray-100 text-gray-700 py-2 px-4 rounded-lg max-w-xs shadow-md">
-            <p class="font-semibold">${user}</p>
+            <p class="font-semibold">${userName}</p>
             <p>${message}</p>
           </div>
         `;
@@ -72,7 +81,7 @@
 
     // Lorsque le client se connecte
     socket.on('connect', () => {
-      console.log('Connected to server');
+      console.log('Connecté au serveur en tant que', userName);
     });
 
     // Recevoir un message du serveur
@@ -85,7 +94,7 @@
       const messageInput = document.getElementById('messageInput');
       const message = messageInput.value.trim();
       if (message) {
-        displayMessage('You', message, true); // Afficher le message envoyé par l'utilisateur
+        displayMessage(userName, message, true); // Utiliser le nom d'utilisateur aléatoire
         socket.emit('sendMessage', message); // Envoyer le message au serveur
         messageInput.value = ''; // Réinitialiser le champ de texte
       }
