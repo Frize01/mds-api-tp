@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const { DataTypes } = Sequelize; // Déstructure DataTypes de Sequelize
-    await queryInterface.createTable('order_lines', {
+    await queryInterface.createTable("order_lines", {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -39,6 +39,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('order_lines');
-  }
+    await queryInterface.dropTable("order_lines");
+  },
 };

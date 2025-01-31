@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "fix": "eslint --fix .",
     "start": "node app.js",
     "migrate": "npx sequelize-cli db:migrate",
     "dev": "nodemon app.js",
@@ -31,6 +32,14 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "sequelize-cli": "^6.6.2"
+    "@babel/register": "^7.25.9",
+    "nodemon": "^3.1.1",
+    "sequelize-cli": "^6.6.2",
+    "@stylistic/eslint-plugin": "^2.12.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-promise": "^7.2.1",
+    "prettier": "^3.4.2"
   }
 }

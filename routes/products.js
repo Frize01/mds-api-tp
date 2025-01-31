@@ -5,18 +5,6 @@ import { body, validationResult } from "express-validator";
 
 const productRouter = express.Router();
 
-/* Example JSON for testing API routes:
-{
-    "name": "iPhone 14",
-    "description": "Latest iPhone model with advanced features",
-    "price": 999.99,
-    "stock": 50,
-    "reduce_pourcentage": 10.5,
-    "reference": "IP14-2023",
-    "category": "product"
-}
-*/
-
 const validationCreate = [
     // Validations pour la création de produit
     body("name").notEmpty().withMessage("Name is required"),
