@@ -52,7 +52,7 @@ const validationPatch = [
 
 /**
  * @swagger
- * /products:
+ * /v0/products:
  *   get:
  *     summary: "Obtenir la liste de tous les produits"
  *     description: "Cette route permet de récupérer tous les produits disponibles dans la base de données."
@@ -77,7 +77,7 @@ productRouter.get("/", authenticateJWT, async (req, res) => {
 
 /**
  * @swagger
- * /products/{id}:
+ * /v0/products/{id}:
  *   get:
  *     summary: "Obtenir un produit spécifique"
  *     description: "Cette route permet de récupérer un produit spécifique en fonction de son ID."
@@ -114,7 +114,7 @@ productRouter.get("/:id", authenticateJWT, async (req, res) => {
 
 /**
  * @swagger
- * /products:
+ * /v0/products:
  *   post:
  *     summary: "Créer un nouveau produit"
  *     description: "Cette route permet de créer un nouveau produit dans la base de données."
@@ -176,7 +176,7 @@ productRouter.post("/", authenticateJWT, validationCreate, async (req, res) => {
 
 /**
  * @swagger
- * /products/{id}:
+ * /v0/products/{id}:
  *   put:
  *     summary: "Mettre à jour un produit existant"
  *     description: "Cette route permet de mettre à jour un produit existant dans la base de données."
@@ -251,7 +251,7 @@ productRouter.put("/:id", authenticateJWT, validationUpdate, async (req, res) =>
 
 /**
  * @swagger
- * /products/{id}:
+ * /v0/products/{id}:
  *   patch:
  *     summary: "Mettre à jour partiellement un produit"
  *     description: "Cette route permet de mettre à jour certaines propriétés d'un produit existant."
@@ -324,7 +324,7 @@ productRouter.patch("/:id", authenticateJWT, validationPatch, async (req, res) =
 
 /**
  * @swagger
- * /products/{id}:
+ * /v0/products/{id}:
  *   delete:
  *     summary: "Supprimer un produit"
  *     description: "Cette route permet de supprimer un produit spécifique de la base de données."

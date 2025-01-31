@@ -27,7 +27,7 @@ const validateBodyRegister = [
 
     /**
      * @swagger
-     * /auth/register:
+     * /v0/auth/register:
      *   post:
      *     tags:
      *       - Auth
@@ -99,7 +99,7 @@ const validateBodyRegister = [
 
 /**
  * @swagger
- * /auth:
+ * /v0/auth:
  *   post:
  *     tags:
  *       - Auth

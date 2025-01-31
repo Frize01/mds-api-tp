@@ -67,7 +67,7 @@ app.use(express.json())
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.use(router)
+app.use('/v0', router)
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)

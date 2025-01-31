@@ -31,7 +31,7 @@ const validationPatch = [
 
 /**
  * @swagger
- * /users:
+ * /v0/users:
  *   get:
  *     summary: Récupérer tous les utilisateurs
  *     description: Cette route permet de récupérer la liste de tous les utilisateurs, excluant le mot de passe. Authentification JWT requise.
@@ -55,7 +55,7 @@ userRouter.get("/", authenticateJWT, async (req, res) => {
 
 /**
  * @swagger
- * /users/{id}:
+ * /v0/users/{id}:
  *   get:
  *     summary: Récupérer un utilisateur par son ID
  *     description: Cette route permet de récupérer un utilisateur spécifique par son ID. Authentification JWT requise.
@@ -91,7 +91,7 @@ userRouter.get("/:id", authenticateJWT, async (req, res) => {
 // Documentation Swagger pour la route POST /users
 /**
  * @swagger
- * /users:
+ * /v0/users:
  *   post:
  *     summary: Créer un nouvel utilisateur
  *     description: Cette route permet de créer un utilisateur. Authentification JWT requise.
@@ -170,7 +170,7 @@ userRouter.post(
 // Documentation Swagger pour la route PUT /users/{id}
  /**
   * @swagger
-  * /users/{id}:
+  * /v0/users/{id}:
   *   put:
   *     summary: Mettre à jour un utilisateur par son ID
   *     description: Cette route permet de mettre à jour les informations d'un utilisateur par son ID. Authentification JWT requise.
@@ -242,7 +242,7 @@ userRouter.put("/:id", authenticateJWT, validationUpdate, async (req, res) => {
 // Documentation Swagger pour la route PATCH /users/{id}
  /**
   * @swagger
-  * /users/{id}:
+  * /v0/users/{id}:
   *   patch:
   *     summary: Mettre à jour partiellement un utilisateur par son ID
   *     description: Cette route permet de mettre à jour partiellement un utilisateur. Authentification JWT requise.
@@ -302,7 +302,7 @@ userRouter.patch("/:id", authenticateJWT, validationPatch, async (req, res) => {
 // Documentation Swagger pour la route DELETE /users/{id}
  /**
   * @swagger
-  * /users/{id}:
+  * /v0/users/{id}:
   *   delete:
   *     summary: Supprimer un utilisateur par son ID
   *     description: Cette route permet de supprimer un utilisateur. Authentification JWT requise.
