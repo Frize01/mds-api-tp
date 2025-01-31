@@ -1,9 +1,7 @@
-
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import User from "../models/User.js";
 dotenv.config();
-
 
 // Description: Middleware pour vérifier si le token JWT est valide
 const authenticateJWT = (req, res, next) => {

@@ -1,5 +1,5 @@
-import prettier from 'eslint-plugin-prettier';
-import stylistic from '@stylistic/eslint-plugin';
+import prettier from "eslint-plugin-prettier";
+import stylistic from "@stylistic/eslint-plugin";
 
 export default [
   {
@@ -9,7 +9,7 @@ export default [
     files: ["**/*.js"],
     languageOptions: {
       ecmaVersion: 2021,
-      sourceType: "script",
+      sourceType: "module",
       globals: {
         browser: true,
         node: true,

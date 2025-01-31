@@ -27,33 +27,32 @@ const __dirname = dirname(__filename);
 
 // Option Swagger
 const swaggerOptions = {
-    swaggerDefinition: {
-        openapi: "3.0.0",
-        info: {
-            title: "Mon API",
-            version: "1.0.0",
-            description: "Documentation de mon API",
-        },
-        tags: [
-            { name: "Auth", description: "API pour l'authentification" },
-            { name: "Utilisateurs", description: "API pour les utilisateurs" },
-            { name: "Produits", description: "API pour les produits" },
-        ],
-        security: [{ BearerAuth: [] }],
-        components: {
-            securitySchemes: {
-                BearerAuth: {
-                    type: "apiKey",
-                    in: "header",
-                    name: "Authorization",
-                    description:
-                        "Entrez le token JWT comme suit: `Bearer <votre_token>`",
-                },
-            },
-        },
-        servers: [{ name: "Localhost Node", url: "http://localhost:3000" }],
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Mon API",
+      version: "1.0.0",
+      description: "Documentation de mon API",
     },
-    apis: ["./routes/*.js"], // Indiquer les fichiers où se trouvent les annotations Swagger
+    tags: [
+      { name: "Auth", description: "API pour l'authentification" },
+      { name: "Utilisateurs", description: "API pour les utilisateurs" },
+      { name: "Produits", description: "API pour les produits" },
+    ],
+    security: [{ BearerAuth: [] }],
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: "apiKey",
+          in: "header",
+          name: "Authorization",
+          description: "Entrez le token JWT comme suit: `Bearer <votre_token>`",
+        },
+      },
+    },
+    servers: [{ name: "Localhost Node", url: "http://localhost:3000" }],
+  },
+  apis: ["./routes/*.js"], // Indiquer les fichiers où se trouvent les annotations Swagger
 };
 
 // Générer la documentation Swagger
@@ -65,56 +64,56 @@ app.use(express.static(path.join(__dirname, "public"))); // Dossier public
 
 // Route pour servir la page d'accueil (socket.html)
 app.get("/socket", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "socket.html")); // Chemin vers ton fichier HTML
+  res.sendFile(path.join(__dirname, "public", "socket.html")); // Chemin vers ton fichier HTML
 });
 
 // Liste des utilisateurs connectés
 let users = [];
 
 io.on("connection", (socket) => {
-    console.log("A user connected");
+  console.log("A user connected");
 
-    // Lorsque le client envoie un message
-    socket.on("sendMessage", (message) => {
-        const user = socket.id; // Utiliser l'ID du socket comme identifiant unique
-        console.log(`Message from ${user}: ${message}`);
+  // Lorsque le client envoie un message
+  socket.on("sendMessage", (message) => {
+    const user = socket.id; // Utiliser l'ID du socket comme identifiant unique
+    console.log(`Message from ${user}: ${message}`);
 
-        // Check if message starts with /dab
-        if (message.startsWith("/dab")) {
-            // Extract the number after /dab
-            const somme = parseFloat(message.split("/dab")[1]);
+    // Check if message starts with /dab
+    if (message.startsWith("/dab")) {
+      // Extract the number after /dab
+      const somme = parseFloat(message.split("/dab")[1]);
 
-            // Validate if it's a valid number
-            if (isNaN(somme)) {
-                socket.emit(
-                    "message",
-                    "System",
-                    "Erreur: Veuillez entrer un nombre valide après /dab"
-                );
-                return;
-            }
+      // Validate if it's a valid number
+      if (isNaN(somme)) {
+        socket.emit(
+          "message",
+          "System",
+          "Erreur: Veuillez entrer un nombre valide après /dab",
+        );
+        return;
+      }
 
-            const result = dab({ somme: somme, devise: "€" });
+      const result = dab({ somme: somme, devise: "€" });
 
-            // Format the result message
-            let dabMessage = "";
-            result.forEach((item) => {
-                dabMessage += `${item.nombre} ${item.type} de ${item.valeur}€<br>`;
-            });
+      // Format the result message
+      let dabMessage = "";
+      result.forEach((item) => {
+        dabMessage += `${item.nombre} ${item.type} de ${item.valeur}€<br>`;
+      });
 
-            // Send result back to user
-            socket.emit("message", "DAB", dabMessage);
-            return;
-        }
+      // Send result back to user
+      socket.emit("message", "DAB", dabMessage);
+      return;
+    }
 
-        // Diffuser le message à tous les clients sauf l'émetteur
-        socket.broadcast.emit("message", user, message);
-    });
+    // Diffuser le message à tous les clients sauf l'émetteur
+    socket.broadcast.emit("message", user, message);
+  });
 
-    // Lorsqu'un utilisateur se déconnecte
-    socket.on("disconnect", () => {
-        console.log("A user disconnected");
-    });
+  // Lorsqu'un utilisateur se déconnecte
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+  });
 });
 
 // API
@@ -122,12 +121,12 @@ app.use("/v0", router);
 
 // 404
 app.get("/*", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "404.html"));
+  res.sendFile(path.join(__dirname, "public", "404.html"));
 });
 
 // Démarrer le serveur
 server.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
 
 export default app;
