@@ -66,8 +66,13 @@ app.use(express.json())
 
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+// API
+app.use("/v0", router);
 
-app.use('/v0', router)
+// 404
+app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "404.html"));
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)
