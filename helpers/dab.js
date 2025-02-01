@@ -49,4 +49,4 @@ function dab({ somme, devise }) {
   return resultat;
 }
 
-module.exports = dab;
+export default dab;

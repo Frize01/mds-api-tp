@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import dab from "../helpers/dab.js";
 
 // Configurer Socket.IO
 export default (server) => {
